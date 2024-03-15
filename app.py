@@ -18,18 +18,16 @@ def indexHtml():
             ilkodu = str(iller)
             veriler = datafetch.vericek(ilkodu)
                
-            if veriler == 0: #200 hata verirse 0 döndürür
+            if veriler.hatakodu == 0: #200 hata verirse 0 döndürür
                 text = "Bilgi alınamadı. Daha sonra tekrar deneyin."
                 return render_template('index.html', data=data, text=text)
             else:
-                if veriler == 1: #seçilen il boşsa 1 döndürür
+                if veriler.hatakodu == 1: #seçilen il boşsa 1 döndürür
                     text = "Tekrar deneyin."
                     return render_template('index.html', data=data, text=text)
                 else: #veriler alındıysa il adı texti ve fiyat dataları beraber bir array içinde geri döndürülür
-                    data = veriler[1:]
-                    text = veriler[:1]
-                    text = text[0]
-                    return render_template('index.html', data=data, text=text)
+
+                    return render_template('index.html', data=veriler, text=veriler.iladi)
             
 if __name__ == "__main__":
     app.run(debug=True)

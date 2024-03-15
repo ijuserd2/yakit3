@@ -5,29 +5,34 @@ import requests
 
 url = "https://www.petrolofisi.com.tr/akaryakit-fiyatlari"
 
+class dataFetch:
+    hatakodu = None
+    iladi = None
+    vmaxKursunsuz = 1
+    vmaxDiesel = 2
+    vpro = 3
+    pogaz = 4
+            
+        
 def vericek(e):
-    text = [""]
-    data = [1, 2, 3, 4]
+    dataFetchClass = dataFetch()
     r = requests.get(url)
     if str(r.status_code) != "200":
-        return 0
+        dataFetchClass.hatakodu = 0
     else:
         if e == "":
-            text = "Tekrar deneyin."
-            return 1
+            dataFetchClass.hatakodu = 1
         else:
+            dataFetchClass.hatakodu = 2
             soup = BeautifulSoup(r.text, "html.parser")
             fuel = soup.find('tr', {'data-disctrict-id': e})
-            iladi = fuel["data-disctrict-name"]
-            text = [iladi]
+            dataFetchClass.iladi = fuel["data-disctrict-name"]
             fuelprice = fuel.find_all('span', {'class': 'with-tax'})
-            data[0] = fuelprice[0].text
-            data[1] = fuelprice[1].text
-            data[2] = fuelprice[2].text
-            data[3] = fuelprice[3].text
-            textvedata = text + data
-            return textvedata
+            dataFetchClass.vmaxKursunsuz = fuelprice[0].text
+            dataFetchClass.vmaxDiesel = fuelprice[1].text
+            dataFetchClass.vpro = fuelprice[2].text
+            dataFetchClass.pogaz = fuelprice[3].text
         
-    
+    return dataFetchClass
     
     
